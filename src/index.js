@@ -9,7 +9,7 @@ let generateShortId = function () {
 };
 
 module.exports = (function () {
-  const log = mux.utils.log;
+  const log = mux.log;
   const secondsToMs = mux.utils.secondsToMs;
   // const getComputedStyle = mux.utils.getComputedStyle; // Helper function, same return as getComputedStyle in HTML5
 
