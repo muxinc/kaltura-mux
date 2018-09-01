@@ -114,6 +114,7 @@ const muxPlugin = {
   destroy: function () {
     const player = this.getPlayer();
 
+    player.mux.emit('destroy');
     player.removeJsListener('.muxData');
     this.unbind();
     this._super();
