@@ -44,13 +44,15 @@ const muxPlugin = {
         video_source_url: source.src,
         video_source_mime_type: source.mimeType,
         video_source_duration: player.getDuration()
-        // None of the below seem possible for this version of Kaltura's player
-        // video_source_height: player.currentSource().height,
-        // video_source_width: player.currentSource().width,
-        // player_is_fullscreen: fullscreen,
-        // player_preload_on: ,
-        // video_poster_url: ,
-        // player_language_code: ,
+        /*
+         * None of the below seem possible for this version of Kaltura's player
+         * video_source_height: player.currentSource().height,
+         * video_source_width: player.currentSource().width,
+         * player_is_fullscreen: fullscreen,
+         * player_preload_on: ,
+         * video_poster_url: ,
+         * player_language_code: ,
+         */
       };
     };
 
