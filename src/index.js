@@ -3,7 +3,7 @@ import mux from 'mux-embed';
 // const log = mux.log;
 const assign = mux.utils.assign;
 const secondsToMs = mux.utils.secondsToMs;
-const getTimestamp = mux.utils.getTimestamp;
+const clock = mux.utils.clock;
 
 const muxPlugin = {
   defaultConfig: {
@@ -62,7 +62,7 @@ const muxPlugin = {
     player.addJsListener('playerPlayed.muxData', () => {
       const playTimeMs = secondsToMs(player.evaluate('{video.player.currentTime}'));
       const sendPlaying = (currentTime) => {
-        const now = getTimestamp();
+        const now = clock.now();
         const currentTimeMs = secondsToMs(currentTime);
         const timeDiff = currentTimeMs - playTimeMs;
 
