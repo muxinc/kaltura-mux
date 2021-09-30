@@ -1,32 +1,108 @@
 <!DOCTYPE html>
-<html>
-	<head> </head>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+
+		<!-- load kaltura-player-js -->
+		<!-- <script src="../dist/kaltura-ovp-player.js" type="text/javascript"></script> -->
+	</head>
 	<body>
-		<div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
+		<h1>2021 Autoembed (embeds playkit)</h1>
+		<div id="test-autoembed" style="width: 640px; height: 360px"></div>
+		<script
+			type="text/javascript"
+			src='https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693?autoembed=true&targetId=test-autoembed&entry_id=1_xrgmoquy&config[playback]={"autoplay":true}'
+		></script>
+		<script>
+			this.kalturaPlayer.ready().then(() => {
+				kalturaPlayer.addEventListener(kalturaPlayer.Event.Core.PAUSE, (event) => {
+					const payload = event.payload;
+					console.log(event);
+					console.log(event.type);
+				});
+			});
+		</script>
+
+		<!-- -------------------------------------- -->
+		<!-- DYNAMIC EMBED embedPlaykit (works loading ../dist/kaltura-ovp-player.js OR https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693 ) -->
+
+		<h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
 		<script
 			type="text/javascript"
 			src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"
 		></script>
-		<script type="text/javascript">
+		<div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
+		<script>
+			var config = {
+				targetId: 'kalturaPlayer',
+				sources: {
+					progressive: [
+						{
+							mimetype: 'video/mp4',
+							url: 'https://muxed.s3.amazonaws.com/ink.mp4',
+						},
+					],
+				},
+				provider: {
+					partnerId: 4298703,
+				},
+				playback: {
+					autoplay: true,
+				},
+			};
+
 			try {
-				let kalturaPlayer = KalturaPlayer.setup({
-					targetId: 'kalturaPlayer',
-					sources: {
-						progressive: [
-							{
-								mimetype: 'video/mp4',
-								url: 'https://muxed.s3.amazonaws.com/ink.mp4',
-							},
-						],
-					},
-					provider: {
-						partnerId: 4298703,
-					},
-					playback: {
-						autoplay: true,
-					},
+				var DEkalturaPlayer = KalturaPlayer.setup(config);
+				this.DEkalturaPlayer.ready().then(() => {
+					DEkalturaPlayer.addEventListener(DEkalturaPlayer.Event.Core.PAUSE, (event) => {
+						const payload = event.payload;
+						console.log(event);
+						console.log(event.type);
+					});
 				});
-				//kalturaPlayer.loadMedia(); //{ entryId: '1_rn53w8i9' }
+			} catch (e) {
+				console.error(e.message);
+			}
+		</script>
+
+		<h1>2021 iframe EMBED (embeds playkit)</h1>
+		<h3>**player api not supported**</h3>
+		<iframe
+			type="text/javascript"
+			src='https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693?iframeembed=true&entry_id=1_xrgmoquy&config[playback]={"autoplay":true}'
+			style="width: 640px; height: 360px"
+			allowfullscreen
+			webkitallowfullscreen
+			mozAllowFullScreen
+			frameborder="0"
+		>
+		</iframe>
+
+		<!-- -------------------------------------- -->
+		<!-- OLD PLAYER API embedIframe (get my downloading iframe from universal player in KMC or old documentation) -->
+
+		<h1>OLD PLAYER API (supports emedIframe --KMC share+embed for universal player)</h1>
+		<script src="https://cdnapisec.kaltura.com/p/4298703/sp/429870300/embedIframeJs/uiconf_id/48748933/partner_id/4298703"></script>
+		<div id="kaltura_player_1633024605" style="width: 560px; height: 395px"></div>
+		<script>
+			kWidget.embed({
+				targetId: 'kaltura_player_1633024605',
+				wid: '_4298703',
+				uiconf_id: 48748933,
+				flashvars: {},
+				cache_st: 1633024605,
+				entry_id: '1_xrgmoquy',
+			});
+
+			try {
+				const playerId = 'kaltura_player_1633024605';
+				kWidget.addReadyCallback(function (playerId) {
+					var kdp = document.getElementById(playerId);
+					kdp.kBind('playerPaused', function (data) {
+						console.log('player paused', data);
+					});
+				});
 			} catch (e) {
 				console.error(e.message);
 			}
