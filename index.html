@@ -14,15 +14,6 @@
 			type="text/javascript"
 			src='https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693?autoembed=true&targetId=test-autoembed&entry_id=1_xrgmoquy&config[playback]={"autoplay":true}'
 		></script>
-		<script>
-			this.kalturaPlayer.ready().then(() => {
-				kalturaPlayer.addEventListener(kalturaPlayer.Event.Core.PAUSE, (event) => {
-					const payload = event.payload;
-					console.log(event);
-					console.log(event.type);
-				});
-			});
-		</script>
 
 		<!-- -------------------------------------- -->
 		<!-- DYNAMIC EMBED embedPlaykit (works loading ../dist/kaltura-ovp-player.js OR https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693 ) -->
