@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 // import window from 'global/window'; // Remove if you do not need to access the global `window`
 // import document from 'global/document'; // Remove if you do not need to access the global `document`
 import mux from 'mux-embed';
@@ -8,15 +9,27 @@ const assign = mux.utils.assign;
 // const getComputedStyle = mux.utils.getComputedStyle;
 
 const initKalturaMux = function (player, options) {
-
   // Make sure we got a player - Check properties to ensure that a player was passed
-  if (typeof player !== 'object' || typeof player.getVersion !== 'function') {
-    log.warn('[kaltura-mux] You must provide a valid Kaltura player to initKalturaMux.');
-    return;
-  }
-
+//   if (typeof player !== 'object' || typeof player.getVersion !== 'function') {
+//     log.warn('[kaltura-mux] You must provide a valid Kaltura player to initKalturaMux.');
+//     return;
+//   }
   // Accessor for event namespace if used by your player
   // const YOURPLAYER_EVENTS = || {};
+  const PlaybackEventMap = new Map();
+console.log('watchingggggg');
+console.log('monica');
+
+
+
+  PlaybackEventMap.set('play', player.Event.Core.PLAY);
+  PlaybackEventMap.set('videochange', player.Event.Core.CHANGE_SOURCE_STARTED);
+  PlaybackEventMap.set('playing', player.Event.Core.PLAYING);
+  PlaybackEventMap.set('pause', player.Event.Core.PAUSE);
+  PlaybackEventMap.set('timeupdate', player.Event.Core.TIMEUPDATE);
+  PlaybackEventMap.set('seeking', player.Event.Core.SEEKING);
+  PlaybackEventMap.set('seeked', player.Event.Core.SEEKED);
+  PlaybackEventMap.set('ended', player.Event.Core.ENDED);
 
   // Prepare the data passed in
   options = options || {};
@@ -71,6 +84,16 @@ const initKalturaMux = function (player, options) {
   };
 
   // LOOP THROUGH EVENTS_DICTIONARY AND set the events
+  player.ready().then(() => {
+	  console.log('player ready');
+  });
+  PlaybackEventMap.forEach((val, key) => {
+	const eventName = val;
+	console.log('event name', eventName);
+	player.addEventListener(eventName, (event) => {
+	    console.log(event.type);
+});
+  });
 
   // The following are linking events that the Mux core SDK requires with events from the player.
   // There may be some cases where the player will send the same Mux event on multiple different
