@@ -16,7 +16,9 @@
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "deploy": "npm run package && babel-node scripts/deploy.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@playkit-js/playkit-js-ima": "^1.4.1"
+  },
   "devDependencies": {
     "aws-sdk": "^2.2.37",
     "babel-cli": "^6.5.1",

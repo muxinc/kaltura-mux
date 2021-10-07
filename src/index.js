@@ -17,10 +17,7 @@ const initKalturaMux = function (player, options) {
   // Accessor for event namespace if used by your player
   // const YOURPLAYER_EVENTS = || {};
   const PlaybackEventMap = new Map();
-console.log('watchingggggg');
-console.log('monica');
-
-
+  const AdsEventMap = new Map();
 
   PlaybackEventMap.set('play', player.Event.Core.PLAY);
   PlaybackEventMap.set('videochange', player.Event.Core.CHANGE_SOURCE_STARTED);
@@ -30,6 +27,16 @@ console.log('monica');
   PlaybackEventMap.set('seeking', player.Event.Core.SEEKING);
   PlaybackEventMap.set('seeked', player.Event.Core.SEEKED);
   PlaybackEventMap.set('ended', player.Event.Core.ENDED);
+
+  AdsEventMap.set('adbreakstart', player.Event.AD_BREAK_START);
+  AdsEventMap.set('adplaying', player.Event.AD_STARTED);
+  AdsEventMap.set('adpause', player.Event.AD_PAUSED);
+  AdsEventMap.set('adfirstquartile', player.Event.AD_FIRST_QUARTILE);
+  AdsEventMap.set('admidpoint', player.Event.AD_MIDPOINT);
+  AdsEventMap.set('adthirdquartile', player.Event.AD_THIRD_QUARTILE);
+  AdsEventMap.set('adended', player.Event.AD_COMPLETED);
+  AdsEventMap.set('adbreakend', player.Event.AD_BREAK_END);
+  AdsEventMap.set('aderror', player.Event.AD_ERROR);
 
   // Prepare the data passed in
   options = options || {};
@@ -89,11 +96,26 @@ console.log('monica');
   });
   PlaybackEventMap.forEach((val, key) => {
 	const eventName = val;
-	console.log('event name', eventName);
+
 	player.addEventListener(eventName, (event) => {
 	    console.log(event.type);
-});
+	});
   });
+
+  AdsEventMap.forEach((val, key) => {
+	const eventName = val;
+
+	player.addEventListener(eventName, (event) => {
+		if(eventName === player.Event.AD_STARTED){
+			const ad_tag_url = player.ads.getAd()._url;
+	  		console.log("ad-tag-url", ad_tag_url);
+		}
+	    console.log(event.type);
+	});
+  });
+
+
+	  
 
   // The following are linking events that the Mux core SDK requires with events from the player.
   // There may be some cases where the player will send the same Mux event on multiple different
