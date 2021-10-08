@@ -29,6 +29,7 @@ const initKalturaMux = function (player, options) {
   PlaybackEventMap.set('seeking', player.Event.Core.SEEKING);
   PlaybackEventMap.set('seeked', player.Event.Core.SEEKED);
   PlaybackEventMap.set('ended', player.Event.Core.ENDED);
+  PlaybackEventMap.set('error', player.Event.Core.ERROR);
 
   AdsEventMap.set('adbreakstart', player.Event.AD_BREAK_START);
   AdsEventMap.set('adplaying', player.Event.AD_STARTED);
@@ -38,6 +39,7 @@ const initKalturaMux = function (player, options) {
   AdsEventMap.set('adthirdquartile', player.Event.AD_THIRD_QUARTILE);
   AdsEventMap.set('adended', player.Event.AD_COMPLETED);
   AdsEventMap.set('adbreakend', player.Event.AD_BREAK_END);
+  AdsEventMap.set('aderror', player.Event.AD_ERROR);
 
   // Prepare the data passed in
   options = options || {};
@@ -89,26 +91,36 @@ const initKalturaMux = function (player, options) {
   };
 
   player.ready().then(() => {
-    player.mux.emit('playerready');
+    player.mux.emit('playerready', {});
   });
 
   PlaybackEventMap.forEach((kalturaEvent, muxEvent) => {
     player.addEventListener(kalturaEvent, (event) => {
-      player.mux.emit(muxEvent);
+      let data = {};
+
+      if (kalturaEvent === player.Event.Core.ERROR) {
+        data.player_error_code = event.payload.code;
+        data.player_error_message = event.payload.data.message;
+      } ;
+      player.mux.emit(muxEvent, data);
     });
   });
 
   AdsEventMap.forEach((kalturaEvent, muxEvent) => {
     player.addEventListener(kalturaEvent, (event) => {
+      let data = {};
+
       if (kalturaEvent === player.Event.AD_STARTED) {
         const ad_tag_url = player.ads.getAd()._url;
 
-        player.mux.emit(muxEvent);
         player.mux.emit('ad_tag_url', ad_tag_url);
-      } else {
-        player.mux.emit(muxEvent);
+      } if (kalturaEvent === player.Event.AD_ERROR) {
+        data.player_error_code = event.payload.code;
+        data.player_error_message = event.payload.data.message;
       }
-    });
+      player.mux.emit(muxEvent, data);
+    }
+    );
   });
 
   // The following are linking events that the Mux core SDK requires with events from the player.
