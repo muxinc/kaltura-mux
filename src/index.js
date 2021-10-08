@@ -91,30 +91,28 @@ const initKalturaMux = function (player, options) {
 
   // LOOP THROUGH EVENTS_DICTIONARY AND set the events
   player.ready().then(() => {
-	  console.log('player ready');
+    console.log('player ready');
   });
   PlaybackEventMap.forEach((val, key) => {
-	const eventName = val;
+    const eventName = val;
 
-	player.addEventListener(eventName, (event) => {
-	    console.log(event.type);
-	});
+    player.addEventListener(eventName, (event) => {
+      console.log(event.type);
+    });
   });
 
   AdsEventMap.forEach((val, key) => {
-	const eventName = val;
+    const eventName = val;
 
-	player.addEventListener(eventName, (event) => {
-		if(eventName === player.Event.AD_STARTED){
-			const ad_tag_url = player.ads.getAd()._url;
-	  		console.log("ad-tag-url", ad_tag_url);
-		}
-	    console.log(event.type);
-	});
+    player.addEventListener(eventName, (event) => {
+      if (eventName === player.Event.AD_STARTED) {
+        const ad_tag_url = player.ads.getAd()._url;
+
+        console.log('ad-tag-url', ad_tag_url);
+      }
+      console.log(event.type);
+    });
   });
-
-
-	  
 
   // The following are linking events that the Mux core SDK requires with events from the player.
   // There may be some cases where the player will send the same Mux event on multiple different
