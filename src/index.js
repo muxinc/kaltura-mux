@@ -1,16 +1,17 @@
-// import window from 'global/window'; // Remove if you do not need to access the global `window`
-// import document from 'global/document'; // Remove if you do not need to access the global `document`
 import mux from 'mux-embed';
 
 const log = mux.log;
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
-// const getComputedStyle = mux.utils.getComputedStyle;
+const getComputedStyle = mux.utils.getComputedStyle;
+const safeCall = mux.utils.safeCall;
+
+// eslint-disable-next-line no-undef
+const kalturaPlayer = KalturaPlayer;
 
 const initKalturaMux = function (player, options) {
-
   // Make sure we got a player - Check properties to ensure that a player was passed
-  if (typeof player !== 'object' || typeof player.getVersion !== 'function') {
+  if (typeof player !== 'object') {
     log.warn('[kaltura-mux] You must provide a valid Kaltura player to initKalturaMux.');
     return;
   }
@@ -23,7 +24,7 @@ const initKalturaMux = function (player, options) {
 
   options.data = assign({
     player_software_name: 'Kaltura',
-    // player_software_version: player.getVersion(), // Replace with method to retrieve the version of the player as necessary
+    player_software_version: kalturaPlayer.VERSION,
     player_mux_plugin_name: 'kaltura-mux',
     player_mux_plugin_version: '[AIV]{version}[/AIV]'
   }, options.data);
@@ -34,7 +35,7 @@ const initKalturaMux = function (player, options) {
   // Enable customers to emit events through the player instance
   player.mux = {};
   player.mux.emit = function (eventType, data) {
-    mux.emit(playerID, eventType, data);
+   // mux.emit(playerID, eventType, data);
     console.log('EMIT:', playerID, eventType, data);
   };
 
@@ -44,29 +45,26 @@ const initKalturaMux = function (player, options) {
     return secondsToMs(player.currentTime);
   };
 
-  // Allow mux to automatically retrieve state information about the player on each event sent
+      // Allow mux to automatically retrieve state information about the player on each event sent
   options.getStateData = () => {
+    const videoElement = player.getVideoElement();
+
     return {
-      // Required properties - these must be provided every time this is called
-      // You _should_ only provide these values if they are defined (i.e. not 'undefined')
-      player_is_paused: player.paused || player.ended
-      // player_width: player.getWidth(), // Return the width, in pixels, of the player on screen
-      // player_height: player.getHeight(), // Return the height, in pixels, of the player on screen
-      // video_source_height: player.currentSource().height, // Return the height, in pixels, of the current rendition playing in the player
-      // video_source_width: player.currentSource().width, // Return the height, in pixels, of the current rendition playing in the player
-
-      // // Preferred properties - these should be provided in this callback if possible
-      // // If any are missing, that is okay, but this will be a lack of data for the customer at a later time
-      // player_is_fullscreen: player.isFullscreen(), // Return true if the player is fullscreen
-      // player_autoplay_on: player.autoplay(), // Return true if the player is autoplay
-      // player_preload_on: player.preload(), // Return true if the player is preloading data (metadata, on, auto are all "true")
-      // video_source_url: player.src().url, // Return the playback URL (i.e. URL to master manifest or MP4 file)
-      // video_source_mime_type: player.src().mimeType, // Return the mime type (if possible), otherwise the source type (hls, dash, mp4, flv, etc)
-      // video_source_duration: secondsToMs(player.getDuration()), // Return the duration of the source as reported by the player (could be different than is reported by the customer)
-
-      // // Optional properties - if you have them, send them, but if not, no big deal
-      // video_poster_url: player.poster().url(), // Return the URL of the poster image used
-      // player_language_code: player.language() // Return the language code (e.g. `en`, `en-us`)
+      // Required properties
+      player_is_paused: player.paused || player.ended,
+      player_width: getComputedStyle(videoElement, 'width'),
+      player_height: getComputedStyle(videoElement, 'height'),
+      video_source_height: videoElement.videoHeight,
+      video_source_width: videoElement.videoWidth,
+      // Preferred properties
+      player_is_fullscreen: safeCall(player, 'isFullscreen'),
+      player_autoplay_on: player.config.playback.autoplay === true,
+      player_preload_on: player.config.playback.preload === 'auto',
+      video_source_url: player.selectedSource.url,
+      video_source_mime_type: player.selectedSource.mimetype,
+      video_source_duration: secondsToMs(player.duration),
+      // Optional properties
+      video_poster_url: player.poster
     };
   };
 
