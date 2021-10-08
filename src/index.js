@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-/* eslint-disable no-mixed-spaces-and-tabs */
-// import window from 'global/window'; // Remove if you do not need to access the global `window`
-// import document from 'global/document'; // Remove if you do not need to access the global `document`
-=======
->>>>>>> origin/jr/jr-update-sdk
 import mux from 'mux-embed';
 
 const log = mux.log;
@@ -12,14 +6,6 @@ const assign = mux.utils.assign;
 const getComputedStyle = mux.utils.getComputedStyle;
 const safeCall = mux.utils.safeCall;
 
-<<<<<<< HEAD
-const initKalturaMux = function (player, options) {
-  // Make sure we got a player - Check properties to ensure that a player was passed
-//   if (typeof player !== 'object' || typeof player.getVersion !== 'function') {
-//     log.warn('[kaltura-mux] You must provide a valid Kaltura player to initKalturaMux.');
-//     return;
-//   }
-=======
 // eslint-disable-next-line no-undef
 const kalturaPlayer = KalturaPlayer;
 
@@ -30,7 +16,6 @@ const initKalturaMux = function (player, options) {
     return;
   }
 
->>>>>>> origin/jr/jr-update-sdk
   // Accessor for event namespace if used by your player
   // const YOURPLAYER_EVENTS = || {};
   const PlaybackEventMap = new Map();
