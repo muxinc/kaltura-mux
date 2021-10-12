@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="//path/to/your/kaltura-player"></script>
+  <script type="text/javascript" src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
 </head>
 <body>
-  <div id='playerwrapper'>
-    <!-- embed your player here, vanilla, no ads -->
-  </div>
+  <h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
+  <div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
   <script src='./kaltura-mux.js'></script>
-  <div id="kaltura_player" style="width: 960px; height: 540px;"></div>
   <script>
-    kWidget.embed({
-      'targetId': 'kaltura_player',
-      'wid': '<your widget id>',
-      'uiconf_id': '<your UI conf id>',
-      'flashvars': {
-        'mux': {
-          plugin: true,
-          iframeHTML5Js: './kaltura-mux.js',
-          options: {
-            debug: true,
-            data: {
-              env_key: '<YOUR ENV KEY>'
-            }
-          }
-        }
+    var config = {
+      targetId: 'kalturaPlayer',
+      sources: {
+        progressive: [
+          {
+            mimetype: 'video/mp4',
+            url: 'https://muxed.s3.amazonaws.com/ink.mp4',
+          },
+        ],
       },
-      'entry_id': '<your entry id>'
-    });
+      provider: {
+        partnerId: 4298703,
+      },
+      playback: {
+        autoplay: true,
+      },
+    };
+
+    try{
+      var DEkalturaPlayer = KalturaPlayer.setup(config);
+      initKalturaMux(DEkalturaPlayer);
+
+    } catch (e) {
+      console.error(e.message);
+    }
   </script>
 </body>
 </html>
+
+
