@@ -16,8 +16,6 @@ const initKalturaMux = function (player, options) {
     return;
   }
 
-  // Accessor for event namespace if used by your player
-  // const YOURPLAYER_EVENTS = || {};
   const PlaybackEventMap = new Map();
   const AdsEventMap = new Map();
 
@@ -67,7 +65,7 @@ const initKalturaMux = function (player, options) {
     return secondsToMs(player.currentTime);
   };
 
-      // Allow mux to automatically retrieve state information about the player on each event sent
+  // Allow mux to automatically retrieve state information about the player on each event sent
   options.getStateData = () => {
     const videoElement = player.getVideoElement();
 
@@ -101,7 +99,7 @@ const initKalturaMux = function (player, options) {
       if (kalturaEvent === player.Event.Core.ERROR) {
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
-      } ;
+      };
       player.mux.emit(muxEvent, data);
     });
   });
@@ -119,71 +117,10 @@ const initKalturaMux = function (player, options) {
         data.player_error_message = event.payload.data.message;
       }
       player.mux.emit(muxEvent, data);
-    }
-    );
+    });
   });
 
-  // The following are linking events that the Mux core SDK requires with events from the player.
-  // There may be some cases where the player will send the same Mux event on multiple different
-  // events at the player level (e.g. mux.emit('play') may be as a result of multiple player events)
-  // OR multiple mux events will be sent as the result of a single player event (e.g. if there is
-  // a single event for breaking to a midroll ad, and mux requires a `pause` and an `adbreakstart` event both)
-
-  // Emit the `error` event when the current playback has encountered a fatal
-  // error. Ensure to pass the error code and error message to Mux in this
-  // event. You _must_ include at least one of error code and error message
-  // (but both is better)
-  // player.on('errorEvent', () => {
-  //   player.mux.emit('error', {
-  //     player_error_code: player.errorCode(), // The code of the error
-  //     player_error_message: player.errorMessage() // The message of the error
-  //   });
-  // });
-
-  /* AD EVENTS */
-  // Depending on your player, you may have separate ad events to track, or
-  // the standard playback events may double as ad events. If the latter is the
-  // case, you should track the state of the player (ad vs content) and then
-  // just prepend the Mux events above with 'ad' when those events fire and
-  // the player is in ad mode.
-
-  // Emit the `adbreakstart` event when the player breaks to an ad slot. This
-  // may be directly at the beginning (before a play event) for pre-rolls, or
-  // (for both pre-rolls and mid/post-rolls) may be when the content is paused
-  // in order to break to ad.
-  // player.on('adbreakstartEvent', () => {
-  //   // Some players do not emit a pause event when breaking to ad. Please manually
-  //   // emit this if your player does not do this automatically.
-  //   /*
-  //     if (shouldEmitPause) {
-  //       player.mux.emit('pause');
-  //     }
-  //   */
-  //   player.mux.emit('adbreakstart');
-  // });
-
-  // Emit the `adplaying` event when the current ad begins progressing and displaying
-  // frames. This should match the `playing` event, but specific to ads. NOTE:
-  // you may need to do the same thing here as with `play` if there is no `adplaying` event
-  // player.on('adplayingEvent', () => {
-  //   player.mux.emit('adplaying');
-  // });
-
-  // Emit the `aderror` event when an individual ad within an ad break encounters
-  // an error. This should match the `error` event, but specific to ads
-  // player.on('aderrorEvent', () => {
-  //   player.mux.emit('aderror');
-  // });
-
-  // If your player has a destroy/dispose event to clean up the player, pass
-  // this on to Mux as a `destroy` event.
-  // player.on('destroyEvent', () => {
-  //   // Turn off all listeners for your player if that's possible/needed
-  //   // Then emit `destroy`
-  //   player.mux.emit('destroy');
-  // });
-
-  // Lastly, initialize the tracking
+  // Initialize the tracking
   // mux.init(playerID, options);
 };
 
