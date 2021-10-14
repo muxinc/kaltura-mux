@@ -1,24 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src='//path/to/your/player.min.js'></script>
-</head>
-<body>
-  <div id='playerwrapper'>
-    <!-- embed your player here, complete with your ad integration -->
-  </div>
-  <script src='./kaltura-mux.js'></script>
-  <script>
-    // Get a reference to your player, and pass it to the init function
-    // var player;
 
-    // initYourPlayerMux(player, {
-    //   debug: true,
-    //   data: {
-    //     env_key: 'YOUR_ENV_KEY',
-    //     video_title: 'SAMPLE_TITLE'
-    //   }
-    // });
-  </script>
+<head>
+	<script type="text/javascript"
+		src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
+	<script src="./kaltura-mux.js"></script>
+	<script src="./node_modules/@playkit-js/playkit-js-ima/dist/playkit-ima.js"></script>
+	<script type="text/javascript" src="//imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+</head>
+
+<body>
+	<h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
+	<div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
+	<button class="button" onclick="insertAd()">Play Ad Now</button>
+	<script src='./kaltura-mux.js'></script>
+	<script>
+		function insertAd() {
+			const tag = `https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=${Date.now()}`;
+			DEkalturaPlayer.ads.playAdNow([{ url: [tag] }]);
+		}
+		var config = {
+			targetId: 'kalturaPlayer',
+			sources: {
+				progressive: [
+					{
+						mimetype: 'video/mp4',
+						url: 'https://muxed.s3.amazonaws.com/ink.mp4',
+					},
+				],
+			},
+			provider: {
+				partnerId: 4298703,
+			},
+			playback: {
+				autoplay: true,
+			},
+			plugins: {
+				ima: {
+					adTagurl: 'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=' + Date.now()
+				}
+			}
+		};
+
+		try {
+			var DEkalturaPlayer = KalturaPlayer.setup(config);
+			initKalturaMux(DEkalturaPlayer);
+		} catch (e) {
+			console.error(e.message);
+		}
+	</script>
 </body>
+
 </html>
