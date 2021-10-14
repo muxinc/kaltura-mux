@@ -111,7 +111,7 @@ const initKalturaMux = function (player, options) {
       if (kalturaEvent === player.Event.AD_STARTED) {
         const ad_tag_url = player.ads.getAd()._url;
 
-        data = ad_tag_url;
+        data.ad_tag_url = ad_tag_url;
       } if (kalturaEvent === player.Event.AD_ERROR) {
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
