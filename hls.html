@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <script type="text/javascript" src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
-  <script src="./kaltura-mux.js"></script>
+	<script type="text/javascript"
+		src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
+	<script src="./kaltura-mux.js"></script>
+	<script type="text/javascript" src="./node_modules/hls.js/dist/hls.js"></script>
 	<script type="text/javascript" src="./node_modules/@playkit-js/playkit-js-hls/dist/playkit-hls.js"></script>
 </head>
+
 <body>
-  <h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
-  <div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
-  <button id="next_button" onClick="nextVideo()">Next Video Source</button>
+	<h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
+	<div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
+	<button id="next_button" onClick="nextVideo()">Next Video Source</button>
 	<script src='./kaltura-mux.js'></script>
 	<script>
 		var config = {
 			targetId: 'kalturaPlayer',
 			sources: {
-				hls:[ 
+				hls: [
 					{
 						mimetype: 'application/x-mpegurl',
 						url: 'https://stream.mux.com/XhcuSGDeiihLATfLvxKI7zskIp67vA87EN2wKYrgJ01k.m3u8',
@@ -27,16 +31,16 @@
 			},
 			playback: {
 				autoplay: true,
-				options:{
-					html5:{
-						hls:{
+				options: {
+					html5: {
+						hls: {
 
 						}
 					}
 				}
-			},		
-			plugins:{
-	
+			},
+			plugins: {
+
 			}
 		};
 
@@ -46,6 +50,7 @@
 		} catch (e) {
 			console.error(e.message);
 		}
-		</script>
-	</body>
+	</script>
+</body>
+
 </html>
