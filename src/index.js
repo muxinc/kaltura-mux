@@ -29,6 +29,7 @@ const initKalturaMux = function (player, options) {
   PlaybackEventMap.set('ended', player.Event.Core.ENDED);
   PlaybackEventMap.set('error', player.Event.Core.ERROR);
 
+  AdsEventMap.set('adresponse', player.Event.AD_LOADED);
   AdsEventMap.set('adbreakstart', player.Event.AD_BREAK_START);
   AdsEventMap.set('adplaying', player.Event.AD_STARTED);
   AdsEventMap.set('adpause', player.Event.AD_PAUSED);
@@ -108,10 +109,14 @@ const initKalturaMux = function (player, options) {
     player.addEventListener(kalturaEvent, (event) => {
       let data = {};
 
-      if (kalturaEvent === player.Event.AD_STARTED) {
-        const ad_tag_url = player.ads.getAd()._url;
+      if (kalturaEvent === player.Event.AD_LOADED) {
+        const ad_tag_url = player.plugins.ima.config.adTagUrl;
 
         data.ad_tag_url = ad_tag_url;
+      } if (kalturaEvent === player.Event.AD_STARTED) {
+        const ad_asset_url = player.ads.getAd()._url;
+
+        data.ad_asset_url = ad_asset_url;
       } if (kalturaEvent === player.Event.AD_ERROR) {
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
