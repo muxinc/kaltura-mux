@@ -2008,11 +2008,6 @@ eventemitter3@^3.0.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
   integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
-eventemitter3@^4.0.3:
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
-  integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
-
 events@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
@@ -2607,13 +2602,10 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hls.js@^0.14.17:
-  version "0.14.17"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.14.17.tgz#0127cff2ec2f994a54eb955fe669ef6153a8e317"
-  integrity sha512-25A7+m6qqp6UVkuzUQ//VVh2EEOPYlOBg32ypr34bcPO7liBMOkKFvbjbCBfiPAOTA/7BSx1Dujft3Th57WyFg==
-  dependencies:
-    eventemitter3 "^4.0.3"
-    url-toolkit "^2.1.6"
+hls.js@^1.0.7:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.0.11.tgz#8bc4adf7a80aaaa0378e5e3ad417bb9bb9bea3eb"
+  integrity sha512-KY6WUwtp7v+L4ec5hX6waNB3N0HOGkWfp3r7XcAZtUc6MT6TzbTsH5wYjQTQVQXQ6HVrDGqF2U5ovc+/R4E3lQ==
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -5467,11 +5459,6 @@ url-parse@^1.1.8, url-parse@^1.4.3:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
-
-url-toolkit@^2.1.6:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.2.3.tgz#78fa901215abbac34182066932220279b804522b"
-  integrity sha512-Da75SQoxsZ+2wXS56CZBrj2nukQ4nlGUZUP/dqUBG5E1su5GKThgT94Q00x81eVII7AyS1Pn+CtTTZ4Z0pLUtQ==
 
 url@0.10.3:
   version "0.10.3"
