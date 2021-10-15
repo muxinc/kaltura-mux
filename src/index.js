@@ -1,5 +1,5 @@
 import mux from 'mux-embed';
-import initializeKalturaImaEvents from './ads.js';
+import initializeAdEvents from './ads.js';
 const log = mux.log;
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
@@ -17,7 +17,6 @@ const initKalturaMux = function (player, options) {
   }
 
   const PlaybackEventMap = new Map();
-  const AdsEventMap = new Map();
 
   PlaybackEventMap.set('play', player.Event.Core.PLAY);
   PlaybackEventMap.set('videochange', player.Event.Core.CHANGE_SOURCE_STARTED);
@@ -29,15 +28,6 @@ const initKalturaMux = function (player, options) {
   PlaybackEventMap.set('ended', player.Event.Core.ENDED);
   PlaybackEventMap.set('error', player.Event.Core.ERROR);
 
-  AdsEventMap.set('adbreakstart', player.Event.AD_BREAK_START);
-  AdsEventMap.set('adplaying', player.Event.AD_STARTED);
-  AdsEventMap.set('adpause', player.Event.AD_PAUSED);
-  AdsEventMap.set('adfirstquartile', player.Event.AD_FIRST_QUARTILE);
-  AdsEventMap.set('admidpoint', player.Event.AD_MIDPOINT);
-  AdsEventMap.set('adthirdquartile', player.Event.AD_THIRD_QUARTILE);
-  AdsEventMap.set('adended', player.Event.AD_COMPLETED);
-  AdsEventMap.set('adbreakend', player.Event.AD_BREAK_END);
-  AdsEventMap.set('aderror', player.Event.AD_ERROR);
   // Prepare the data passed in
   options = options || {};
 
@@ -103,23 +93,7 @@ const initKalturaMux = function (player, options) {
     });
   });
 
-  AdsEventMap.forEach((kalturaEvent, muxEvent) => {
-    player.addEventListener(kalturaEvent, (event) => {
-      let data = {};
-
-      if (kalturaEvent === player.Event.AD_STARTED) {
-        const ad_asset_url = player.ads.getAd()._url;
-
-        data.ad_asset_url = ad_asset_url;
-      }
-      player.mux.emit(muxEvent, data);
-    });
-  });
-
-	// Register ad plugins
-  if (player.plugins.ima) {
-    initializeKalturaImaEvents(player);
-  }
+  initializeAdEvents(player);
 
   // Initialize the tracking
   // mux.init(playerID, options);
