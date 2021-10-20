@@ -21,7 +21,7 @@
 				hls: [
 					{
 						mimetype: 'application/x-mpegurl',
-						url: 'https://stream.mux.com/XhcuSGDeiihLATfLvxKI7zskIp67vA87EN2wKYrgJ01k.m3u8',
+						url: 'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8',
 						id: '1',
 					}
 				]
@@ -43,10 +43,16 @@
 
 			}
 		};
-
+		const options = {
+			data: {
+				video_title: "KALTURA MUX",
+				env_key: "dgv3vqa2no1c53b8f0574nr8h"
+			},
+		}
 		try {
 			var DEkalturaPlayer = KalturaPlayer.setup(config);
-			initKalturaMux(DEkalturaPlayer);
+			initKalturaMux(DEkalturaPlayer, options);
+
 		} catch (e) {
 			console.error(e.message);
 		}

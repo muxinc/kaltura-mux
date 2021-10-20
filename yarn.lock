@@ -3134,9 +3134,9 @@ isobject@^3.0.0, isobject@^3.0.1:
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
 
-"javascript-state-machine@https://github.com/kaltura/javascript-state-machine.git#v3.1.0-k-1":
+"javascript-state-machine@git+https://github.com/kaltura/javascript-state-machine.git#v3.1.0-k-1":
   version "3.1.0"
-  resolved "https://github.com/kaltura/javascript-state-machine.git#510114d1a7e98b7bc1444ca22f034a3596b46605"
+  resolved "git+https://github.com/kaltura/javascript-state-machine.git#510114d1a7e98b7bc1444ca22f034a3596b46605"
 
 jmespath@0.15.0:
   version "0.15.0"
