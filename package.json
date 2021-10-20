@@ -16,7 +16,9 @@
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "deploy": "npm run package && babel-node scripts/deploy.js"
   },
+  
   "dependencies": {},
+
   "devDependencies": {
     "aws-sdk": "^2.2.37",
     "babel-cli": "^6.5.1",
@@ -32,6 +34,7 @@
     "mux-embed": "^4.2.0",
     "npm-run-all": "^2.2.0",
     "path": "^0.12.7",
+	"@playkit-js/playkit-js-ima": "^1.4.1",
     "sinon": "^3.0.0",
     "uglify-js": "^2.5.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
