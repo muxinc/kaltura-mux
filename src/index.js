@@ -78,6 +78,9 @@ const initKalturaMux = function (player, options) {
     };
   };
 
+  // Initialize the tracking
+  mux.init(playerID, options);
+
   player.ready().then(() => {
     player.mux.emit('playerready', {});
   });
@@ -97,13 +100,16 @@ const initKalturaMux = function (player, options) {
   initializeAdEvents(player);
 
   const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
+  const hls = player._localPlayer._engine._mediaSourceAdapter._hls;
+  const hlsLib = player._localPlayer._engine._mediaSourceAdapter._hlsjsLib;
 
   if (dash) {
     initializeDashHandler(player, dash);
   }
 
-  // Initialize the tracking
-  mux.init(playerID, options);
+  if (hls) {
+    mux.addHLSJS(playerID, {hlsjs: hls, Hls: hlsLib});
+  }
 };
 
 export default initKalturaMux;
