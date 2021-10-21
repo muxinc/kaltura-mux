@@ -40,5 +40,8 @@
     "webpack-auto-inject-version": "^1.0.0",
     "webpack-dev-server": "^2.8.2",
     "webpack-merge": "^4.1.0"
+  },
+  "peerDependencies": {
+    "kaltura-player-js": "https://github.com/kaltura/kaltura-player-js.git"
   }
 }

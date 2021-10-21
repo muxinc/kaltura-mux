@@ -2,6 +2,8 @@
 <html>
 
 <head>
+	<meta charset="utf-8">
+  <title>Kaltura Mux Demo</title>
 	<script type="text/javascript"
 		src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
 	<script src="./kaltura-mux.js"></script>
@@ -51,15 +53,13 @@
 			},
 			playback: {
 				autoplay: true,
+			},
+			plugins: {
+				mux: {}
 			}
 		};
 
-		try {
-			var DEkalturaPlayer = KalturaPlayer.setup(config);
-			initKalturaMux(DEkalturaPlayer);
-		} catch (e) {
-			console.error(e.message);
-		}
+    var DEkalturaPlayer = KalturaPlayer.setup(config);
 	</script>
 </body>
 

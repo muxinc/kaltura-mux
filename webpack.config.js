@@ -2,11 +2,10 @@ const path = require('path');
 const WebpackAutoInject = require('webpack-auto-inject-version');
 
 module.exports = {
-  entry: './src/entry.js',
+  entry: './src/index.js',
   output: {
     filename: 'kaltura-mux.js',
     path: path.resolve(__dirname, 'build'),
-    library: 'initKalturaMux',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -32,5 +31,13 @@ module.exports = {
         InjectByTag: true
       }
     })
-  ]
+  ],
+  externals: {
+    'kaltura-player-js': {
+      root: 'KalturaPlayer', // indicates global variable
+      commonjs: 'kaltura-player-js',
+      commonjs2: 'kaltura-player-js',
+      amd: 'kaltura-player-js'
+    }
+  }
 };
