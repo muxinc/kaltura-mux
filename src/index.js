@@ -1,5 +1,6 @@
 import mux from 'mux-embed';
 import initializeAdEvents from './ads.js';
+import initializeDashHandler from './dash.js';
 const log = mux.log;
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
@@ -44,7 +45,7 @@ const initKalturaMux = function (player, options) {
   // Enable customers to emit events through the player instance
   player.mux = {};
   player.mux.emit = function (eventType, data) {
-    // mux.emit(playerID, eventType, data);
+    mux.emit(playerID, eventType, data);
     console.log('EMIT:', playerID, eventType, data);
   };
 
@@ -95,8 +96,14 @@ const initKalturaMux = function (player, options) {
 
   initializeAdEvents(player);
 
+  const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
+
+  if (dash) {
+    initializeDashHandler(player, dash);
+  }
+
   // Initialize the tracking
-  // mux.init(playerID, options);
+  mux.init(playerID, options);
 };
 
 export default initKalturaMux;
