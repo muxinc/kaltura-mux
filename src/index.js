@@ -78,9 +78,6 @@ const initKalturaMux = function (player, options) {
     };
   };
 
-  // Initialize the tracking
-  mux.init(playerID, options);
-
   player.ready().then(() => {
     player.mux.emit('playerready', {});
   });
@@ -108,8 +105,12 @@ const initKalturaMux = function (player, options) {
   }
 
   if (hls) {
-    mux.addHLSJS(playerID, {hlsjs: hls, Hls: hlsLib});
+    options.hlsjs = hls;
+    options.Hls = hlsLib;
   }
+
+  // Initialize the tracking
+  mux.init(playerID, options);
 };
 
 export default initKalturaMux;
