@@ -18,7 +18,6 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
-		"@playkit-js/playkit-js": "^0.70.1",
 		"@playkit-js/playkit-js-ima": "^1.4.1",
 		"aws-sdk": "^2.2.37",
 		"babel-cli": "^6.5.1",
