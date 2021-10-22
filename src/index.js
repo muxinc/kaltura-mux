@@ -87,6 +87,12 @@ const initKalturaMux = function (player, options) {
       let data = {};
 
       if (kalturaEvent === player.Event.Core.ERROR) {
+        // const errorCategoryMap = player._localPlayer._engine._mediaSourceAdapter._shakaLib.util.Error.Category;
+        // const errorCodeMap = player._localPlayer._engine._mediaSourceAdapter._shakaLib.util.Error.Code;
+        // const err_category = Object.keys(errorCategoryMap).find(key => errorCategoryMap[key] === event.payload.category);
+        // const err_code = Object.keys(errorCodeMap).find(key => errorCodeMap[key] === event.payload.code);
+
+        // console.log("error category",err_category, err_code);
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
       };
@@ -97,11 +103,12 @@ const initKalturaMux = function (player, options) {
   initializeAdEvents(player);
 
   const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
+  const dashLib = player._localPlayer._engine._mediaSourceAdapter._shakaLib;
   const hls = player._localPlayer._engine._mediaSourceAdapter._hls;
   const hlsLib = player._localPlayer._engine._mediaSourceAdapter._hlsjsLib;
 
   if (dash) {
-    initializeDashHandler(player, dash);
+    initializeDashHandler(player, dash, dashLib);
   }
 
   if (hls) {
