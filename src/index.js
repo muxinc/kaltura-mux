@@ -97,9 +97,16 @@ const initKalturaMux = function (player, options) {
   initializeAdEvents(player);
 
   const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
+  const hls = player._localPlayer._engine._mediaSourceAdapter._hls;
+  const hlsLib = player._localPlayer._engine._mediaSourceAdapter._hlsjsLib;
 
   if (dash) {
     initializeDashHandler(player, dash);
+  }
+
+  if (hls) {
+    options.hlsjs = hls;
+    options.Hls = hlsLib;
   }
 
   // Initialize the tracking
