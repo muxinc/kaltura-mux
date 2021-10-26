@@ -87,6 +87,8 @@ const initKalturaMux = function (player, options) {
       let data = {};
 
       if (kalturaEvent === player.Event.Core.ERROR) {
+        // avoid duplicated errors with DASH error listener.
+        if (!event.payload.data.message) { return; }
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
       };
@@ -97,11 +99,12 @@ const initKalturaMux = function (player, options) {
   initializeAdEvents(player);
 
   const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
+  const dashLib = player._localPlayer._engine._mediaSourceAdapter._shakaLib;
   const hls = player._localPlayer._engine._mediaSourceAdapter._hls;
   const hlsLib = player._localPlayer._engine._mediaSourceAdapter._hlsjsLib;
 
   if (dash) {
-    initializeDashHandler(player, dash);
+    initializeDashHandler(player, dash, dashLib);
   }
 
   if (hls) {
