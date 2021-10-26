@@ -18,14 +18,27 @@ const initKalturaMux = function (player, options) {
 
   // Enable customers to emit events through the player instance
   player.mux = {};
+  let adaptiveEventsSet = false;
+
   player.mux.emit = function (eventType, data) {
     mux.emit(playerID, eventType, data);
-    console.log('EMIT:', {playerID, eventType, data,
-      engine: player._localPlayer._engine, el: player.getVideoElement()});
+    // console.log('EMIT:', playerID, eventType, data);
+
+    // adaptive media players (like dash or hls) events are set here and not inside the
+    // "ready()" function becuase there are events that occur before such "videochange",
+    // so if set these inside "ready()" we could lose some events.
+    if (!adaptiveEventsSet) {
+      adaptiveEventsSet = setAdaptiveMediaPlayerEvents(player);
+    }
   };
 
+  let playerReadySent = false;
+
   player.ready().then(() => {
-    player.mux.emit('playerready', {});
+    if (!playerReadySent) {
+      player.mux.emit('playerready');
+      playerReadySent = true;
+    }
   });
 
   const PlaybackEventMap = new Map();
@@ -83,6 +96,13 @@ const initKalturaMux = function (player, options) {
     player.addEventListener(kalturaEvent, (event) => {
       let data = {};
 
+      // "adaptiveEventsSet" needs to be reset because on video changes, the _localPlayer._engine gets
+      // modified and won't preserve previous players. So imagine a playlist with a progressive video, then
+      // an hls, then a dash video. On every video change we need to set the adaptive media player events again
+      if (kalturaEvent === player.Event.Core.CHANGE_SOURCE_STARTED) {
+        adaptiveEventsSet = false;
+      }
+
       if (kalturaEvent === player.Event.Core.ERROR) {
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
@@ -95,13 +115,28 @@ const initKalturaMux = function (player, options) {
 
   const playerID = player.config.targetId;
 
-  // const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
-
-  // if (dash) {
-  //   initializeDashHandler(player, dash);
-  // }
-
   mux.init(playerID, options);
+};
+
+const setAdaptiveMediaPlayerEvents = (player) => {
+  let eventsSet = false;
+
+  if (player._localPlayer._engine) {
+    // Regardless if enters any of the if statements below, "eventsSet" needs to be set to true.
+    // This is because if entered here means that the _localPlayer._engine was set already. Then if
+    // there is no an "adaptive media Player" in "_engine" like hls or shaka, we don't want to be hitting
+    // this function for every single event.
+    eventsSet = true;
+
+    // Shaka Player:
+    const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
+
+    if (dash) {
+      initializeDashHandler(player, dash);
+    }
+  }
+
+  return eventsSet;
 };
 
 export default initKalturaMux;
