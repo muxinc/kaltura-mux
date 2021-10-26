@@ -37,19 +37,22 @@
         }
       },
       plugins: {
+        mux: {
+          data: {
+            video_title: "KALTURA MUX: HLS",
+            env_key: '<YOUR_ENV_KEY>', // required
 
+            // Metadata
+            player_name: 'Kaltura Player', // ex: 'My Main Player'
+
+            // ... and other metadata
+          }
+        }
       }
     };
-    const options = {
-      data: {
-        video_title: "KALTURA MUX: HLS",
-        env_key: "dgv3vqa2no1c53b8f0574nr8h"
-      },
-    }
+
     try {
       var DEkalturaPlayer = KalturaPlayer.setup(config);
-      initKalturaMux(DEkalturaPlayer, options);
-
     } catch (e) {
       console.error(e.message);
     }

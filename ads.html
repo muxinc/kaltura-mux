@@ -2,8 +2,7 @@
 <html>
 
 <head>
-	<script type="text/javascript"
-		src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
+	<script type="text/javascript" src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
 	<script src="./kaltura-mux.js"></script>
 	<script src="./node_modules/@playkit-js/playkit-js-ima/dist/playkit-ima.js"></script>
 </head>
@@ -32,13 +31,23 @@
 			plugins: {
 				ima: {
 					adTagUrl: "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpostoptimizedpodbumper&cmsid=496&vid=short_onecue&correlator="
+				},
+				mux: {
+					data: {
+						video_title: "KALTURA MUX: ADS",
+						env_key: '<YOUR_ENV_KEY>', // required
+
+						// Metadata
+						player_name: 'Kaltura Player', // ex: 'My Main Player'
+
+						// ... and other metadata
+					}
 				}
 			}
 		};
 
 		try {
 			var DEkalturaPlayer = KalturaPlayer.setup(config);
-			initKalturaMux(DEkalturaPlayer);
 		} catch (e) {
 			console.error(e.message);
 		}
