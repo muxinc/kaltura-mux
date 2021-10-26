@@ -2,48 +2,48 @@
 <html>
 
 <head>
-	<script type="text/javascript"
-		src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
-	<script src="./kaltura-mux.js"></script>
+  <script type="text/javascript"
+    src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
+  <script src="./kaltura-mux.js"></script>
 </head>
 
 <body>
-	<h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
-	<div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
-	<button id="next_button" onClick="nextVideo()">Next Video Source</button>
-	<script>
-		var config = {
-			targetId: 'kalturaPlayer',
-			sources: {
-				dash: [
-					{
-						mimetype: 'application/dash+xml',
-						url: 'http://dash.edgesuite.net/envivio/EnvivioDash3/manifest.mpd',
-						id: '1',
-					}
-				]
-			},
-			provider: {
-				partnerId: 4298703,
-			},
-			playback: {
-				autoplay: true
-			},
-		};
-		const options = {
-			data: {
-				video_title: "KALTURA MUX: DASH ERROR TESTING",
-				env_key: "dgv3vqa2no1c53b8f0574nr8h"
-			},
-		}
-		try {
-			var DEkalturaPlayer = KalturaPlayer.setup(config);
-			initKalturaMux(DEkalturaPlayer, options);
+  <h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
+  <div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
+  <button id="next_button" onClick="nextVideo()">Next Video Source</button>
+  <script>
+    var config = {
+      targetId: 'kalturaPlayer',
+      sources: {
+        dash: [
+          {
+            mimetype: 'application/dash+xml',
+            url: 'http://dash.edgesuite.net/envivio/EnvivioDash3/manifest.mpd',
+            id: '1',
+          }
+        ]
+      },
+      provider: {
+        partnerId: 4298703,
+      },
+      playback: {
+        autoplay: true
+      },
+    };
+    const options = {
+      data: {
+        video_title: "KALTURA MUX: DASH",
+        env_key: "dgv3vqa2no1c53b8f0574nr8h"
+      },
+    }
+    try {
+      var DEkalturaPlayer = KalturaPlayer.setup(config);
+      initKalturaMux(DEkalturaPlayer, options);
 
-		} catch (e) {
-			console.error(e.message);
-		}
-	</script>
+    } catch (e) {
+      console.error(e.message);
+    }
+  </script>
 </body>
 
 </html>
