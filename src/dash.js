@@ -3,7 +3,6 @@ import mux from 'mux-embed';
 const extractHostname = mux.utils.extractHostname;
 
 export default function initializeDashHandler (player, shaka, shakaLib) {
-
   function trackRenditionEvents () {
     let currentBitrate;
 
@@ -29,29 +28,26 @@ export default function initializeDashHandler (player, shaka, shakaLib) {
         });
       }
     };
-
     shaka.addEventListener('adaptation', () => fireRenditionChange());
     shaka.addEventListener('variantchanged', () => fireRenditionChange());
   }
+
   function trackNetworkEvents () {
     const requestType = shakaLib.net.NetworkingEngine.RequestType;
+    const categoryMap = shakaLib.util.Error.Category;
+    const codeMap = shakaLib.util.Error.Code;
 
     shaka.getNetworkingEngine().registerResponseFilter(function (type, response) {
       const responseEnd = mux.utils.now();
 
       if (response.fromCache || !type) return;
 
-      let typeString;
+      let typeString = 'media';
 
       if (type === requestType.MANIFEST) {
         typeString = 'manifest';
       }
-      if (type || type === requestType.SEGMENT) {
-        typeString = 'media';
-      }
-
       const bytes = response.data.byteLength;
-
       const payload = {
         request_bytes_loaded: bytes,
         request_hostname: extractHostname(response.uri),
@@ -64,26 +60,25 @@ export default function initializeDashHandler (player, shaka, shakaLib) {
     });
 
     const handleError = (error) => {
-      console.log('entered handle dash error', {error});
-      const errorCategoryMap = shakaLib.util.Error.Category;
-      const errorCodeMap = shakaLib.util.Error.Code;
-      const category = Object.keys(errorCategoryMap).find(key => errorCategoryMap[key] === error.detail.category);
-      const message = Object.keys(errorCodeMap).find(key => errorCodeMap[key] === error.detail.code);
+      const {code, category, message} = error.detail;
 
-      console.log("ERROR CATEGORY",category);
+      // shaka's VIDEO_ERROR overlaps with playback error listener
+      if (code === codeMap.VIDEO_ERROR) return;
 
+      const errorCategory = Object.keys(categoryMap).find(key => categoryMap[key] === category);
+      const errorCodeMessage = Object.keys(codeMap).find(key => codeMap[key] === code);
+      const errorMessage = message !== undefined ? message : `Shaka Error: ${errorCategory}`;
       const payload = {
-      //   request_error: error + '_' + event.id + '_' + request.type,
-        request_url: error.data,
-      //   request_hostname: extractHostname(event.url),
-        request_type: category,
-        request_error_code: error.code,
-        request_error_type: message
-      // }
+        request_start: error.timeStamp,
+        request_error: errorCodeMessage,
+        request_hostname: undefined,
+        request_type: errorCategory,
+        request_error_code: code,
+        request_error_text: errorMessage
       };
       player.mux.emit('requestfailed', payload);
     };
-    shaka.addEventListener('error', (err) => { handleError(err); });
+    shaka.addEventListener('error', handleError);
   }
   trackRenditionEvents();
   trackNetworkEvents();
