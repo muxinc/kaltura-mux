@@ -87,6 +87,7 @@ const initKalturaMux = function (player, options) {
       let data = {};
 
       if (kalturaEvent === player.Event.Core.ERROR) {
+        // avoid duplicated errors with DASH error listener.
         if (!event.payload.data.message) { return; }
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
