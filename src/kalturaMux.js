@@ -28,7 +28,7 @@ const initKalturaMux = function (player, options) {
     // "ready()" function becuase there are events that occur before such "videochange",
     // so if set these inside "ready()" we could lose some events.
     if (!adaptiveEventsSet) {
-      adaptiveEventsSet = setAdaptiveMediaPlayerEvents(player);
+      adaptiveEventsSet = setAdaptiveMediaPlayerEvents(player, options);
     }
   };
 
@@ -118,7 +118,7 @@ const initKalturaMux = function (player, options) {
   mux.init(playerID, options);
 };
 
-const setAdaptiveMediaPlayerEvents = (player) => {
+const setAdaptiveMediaPlayerEvents = (player, options) => {
   let eventsSet = false;
 
   if (player._localPlayer._engine) {
@@ -133,6 +133,16 @@ const setAdaptiveMediaPlayerEvents = (player) => {
 
     if (dash) {
       initializeDashHandler(player, dash);
+    }
+
+    // Hls Player
+    const hls = player._localPlayer._engine._mediaSourceAdapter._hls;
+
+    if (hls) {
+      const hlsLib = player._localPlayer._engine._mediaSourceAdapter._hlsjsLib;
+
+      options.hlsjs = hls;
+      options.Hls = hlsLib;
     }
   }
 
