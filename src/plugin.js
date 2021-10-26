@@ -19,7 +19,7 @@ kalturaMuxJsPlugin.prototype.destroy = function () { };
 kalturaMuxJsPlugin.prototype.reset = function () { };
 
 kalturaMuxJsPlugin.prototype._addBindings = function () {
-  initKalturaMux(this.player);
+  initKalturaMux(this.player, this.config);
 };
 
 export default kalturaMuxJsPlugin;
