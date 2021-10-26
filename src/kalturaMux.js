@@ -135,7 +135,9 @@ const setAdaptiveMediaPlayerEvents = (player, options) => {
     const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
 
     if (dash) {
-      initializeDashHandler(player, dash);
+      const dashLib = player._localPlayer._engine._mediaSourceAdapter._shakaLib;
+
+      initializeDashHandler(player, dash, dashLib);
     }
 
     // Hls Player
