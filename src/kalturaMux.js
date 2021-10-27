@@ -101,6 +101,7 @@ const initKalturaMux = function (player, options) {
       // an hls, then a dash video. On every video change we need to set the adaptive media player events again
       if (kalturaEvent === player.Event.Core.CHANGE_SOURCE_STARTED) {
         adaptiveEventsSet = false;
+        resetAdaptiveMediaPlayers(player);
       }
 
       if (kalturaEvent === player.Event.Core.ERROR) {
@@ -131,13 +132,13 @@ const setAdaptiveMediaPlayerEvents = (player, options) => {
     // this function for every single event.
     eventsSet = true;
 
-    // Shaka Player:
-    const dash = player._localPlayer._engine._mediaSourceAdapter._shaka;
+    // Shaka Player (dash):
+    const shaka = player._localPlayer._engine._mediaSourceAdapter._shaka;
 
-    if (dash) {
-      const dashLib = player._localPlayer._engine._mediaSourceAdapter._shakaLib;
+    if (shaka) {
+      const shakaLib = player._localPlayer._engine._mediaSourceAdapter._shakaLib;
 
-      initializeDashHandler(player, dash, dashLib);
+      initializeDashHandler(player, shaka, shakaLib);
     }
 
     // Hls Player
@@ -145,13 +146,29 @@ const setAdaptiveMediaPlayerEvents = (player, options) => {
 
     if (hls) {
       const hlsLib = player._localPlayer._engine._mediaSourceAdapter._hlsjsLib;
+      const playerId = player.config.targetId;
 
-      options.hlsjs = hls;
-      options.Hls = hlsLib;
+      // This prop will help to remove hls from mux if video changes
+      player.mux.hlsEventsSet = true;
+      mux.addHLSJS(playerId, { hlsjs: hls, Hls: hlsLib });
     }
   }
 
   return eventsSet;
+};
+
+const resetAdaptiveMediaPlayers = (player) => {
+  // Remove HLS from mux if there is any previous monitor set
+  if (player.mux.hlsEventsSet) {
+    const playerId = player.config.targetId;
+
+    player.mux.hlsEventsSet = undefined;
+    mux.removeHLSJS(playerId);
+  }
+
+  // NOTE: there is no need to reset/remove shaka because kaltura resets the player on
+  // video change, and since shaka events are handled manually then no need
+  // to remove from mux
 };
 
 export default initKalturaMux;
