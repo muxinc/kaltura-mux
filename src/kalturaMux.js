@@ -171,4 +171,8 @@ const resetAdaptiveMediaPlayers = (player) => {
   // to remove from mux
 };
 
-export default initKalturaMux;
+const destroy = (player) => {
+  player.mux.emit('destroy');
+};
+
+export { destroy, initKalturaMux };

@@ -1,6 +1,5 @@
-
 import { BasePlugin } from 'kaltura-player-js';
-import initKalturaMux from './kalturaMux';
+import { initKalturaMux, destroy } from './kalturaMux';
 
 var kalturaMuxJsPlugin = function (name, player, config) {
   BasePlugin.call(this, name, player, config);
@@ -15,7 +14,10 @@ kalturaMuxJsPlugin.isValid = function (player) {
   return true;
 };
 
-kalturaMuxJsPlugin.prototype.destroy = function () { };
+kalturaMuxJsPlugin.prototype.destroy = function () {
+  destroy(this.player);
+};
+
 kalturaMuxJsPlugin.prototype.reset = function () { };
 
 kalturaMuxJsPlugin.prototype._addBindings = function () {
