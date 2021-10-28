@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Kaltura Mux Demo</title>
+  <script type="text/javascript"
+    src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
+  <script src="./kaltura-mux.js"></script>
+</head>
+
+<body>
+  <h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
+  <div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
+  <button id="next_button" onClick="nextVideo()">Next Video Source</button>
+  <script>
+    function nextVideo() {
+      DEkalturaPlayer.configure({
+        playback: {
+          streamPriority: [
+            {
+              engine: 'html5',
+              format: 'progressive',
+            },
+          ],
+        },
+      });
+
+      DEkalturaPlayer.setMedia({
+        sources: {
+          progressive: [
+            {
+              mimetype: 'video/mp4',
+              url: 'http://vjs.zencdn.net/v/oceans.mp4',
+              id: '3',
+            },
+          ],
+        },
+      });
+    }
+    var config = {
+      targetId: 'kalturaPlayer',
+      playlist: {
+        id: 'playlist1',
+        metadata: {
+          name: 'my playlist name',
+          description: 'my playlist desc'
+        },
+        items: [
+          {
+            sources: {
+              progressive: [
+                {
+                  mimetype: 'video/mp4',
+                  url: 'https://muxed.s3.amazonaws.com/ink.mp4',
+                  id: 'prog1',
+                },
+              ],
+            }
+          },
+          {
+            sources: {
+              hls: [
+                {
+                  mimetype: 'application/x-mpegurl',
+                  url: 'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8',
+                  id: 'hls1',
+                }
+              ]
+            },
+          },
+          {
+            sources: {
+              hls: [
+                {
+                  mimetype: 'application/x-mpegurl',
+                  url: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+                  id: 'hls2',
+                }
+              ]
+            },
+          },
+          {
+            sources: {
+              dash: [
+                {
+                  mimetype: 'application/dash+xml',
+                  url: 'http://dash.edgesuite.net/envivio/EnvivioDash3/manifest.mpd',
+                  id: 'dash1',
+                }
+              ]
+            },
+          },
+          {
+            sources: {
+              dash: [
+                {
+                  mimetype: 'application/dash+xml',
+                  url: 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd',
+                  id: 'dash2',
+                }
+              ]
+            },
+          },
+        ],
+        countdown: {
+          duration: 10,
+          showing: true
+        }
+      },
+      provider: {
+        partnerId: 4298703,
+      },
+      playback: {
+        autoplay: true,
+      },
+      plugins: {
+        mux: {
+          data: {
+            env_key: '<YOUR_ENV_KEY>', // required
+
+            // Metadata
+            player_name: 'Kaltura Player', // ex: 'My Main Player'
+
+            // ... and other metadata
+          }
+        }
+      }
+    };
+
+    var DEkalturaPlayer = KalturaPlayer.setup(config);
+  </script>
+</body>
+
+</html>
