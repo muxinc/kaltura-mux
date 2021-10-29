@@ -14,49 +14,34 @@
   <div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
   <button id="next_button" onClick="nextVideo()">Next Video Source</button>
   <script>
-    function nextVideo() {
-      DEkalturaPlayer.configure({
-        playback: {
-          streamPriority: [
-            {
-              engine: 'html5',
-              format: 'progressive',
-            },
-          ],
-        },
-      });
-
-      DEkalturaPlayer.setMedia({
-        sources: {
-          progressive: [
-            {
-              mimetype: 'video/mp4',
-              url: 'http://vjs.zencdn.net/v/oceans.mp4',
-              id: '3',
-            },
-          ],
-        },
-      });
-    }
     var config = {
       targetId: 'kalturaPlayer',
       sources: {
-        progressive: [
+        hls: [
           {
-            mimetype: 'video/mp4',
-            url: 'https://muxed.s3.amazonaws.com/ink.mp4',
-          },
-        ],
+            mimetype: 'application/x-mpegurl',
+            url: 'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8',
+            id: '1',
+          }
+        ]
       },
       provider: {
         partnerId: 4298703,
       },
       playback: {
         autoplay: false,
+        options: {
+          html5: {
+            hls: {
+
+            }
+          }
+        }
       },
       plugins: {
         mux: {
           data: {
+            video_title: "KALTURA MUX: HLS",
             env_key: '<YOUR_ENV_KEY>', // required
 
             // Metadata
@@ -68,7 +53,11 @@
       }
     };
 
-    var DEkalturaPlayer = KalturaPlayer.setup(config);
+    try {
+      var DEkalturaPlayer = KalturaPlayer.setup(config);
+    } catch (e) {
+      console.error(e.message);
+    }
   </script>
 </body>
 
