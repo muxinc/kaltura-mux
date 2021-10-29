@@ -94,7 +94,7 @@ const initKalturaMux = function (player, options) {
         height: getComputedStyle(videoElement, 'height')
       };
 
-      if (videoElement.videoHeight) {
+      if (videoElement && videoElement.videoHeight) {
         props.videoHeight = videoElement.videoHeight;
         props.videoWidth = videoElement.videoWidth;
       }
