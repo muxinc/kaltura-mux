@@ -71,25 +71,66 @@ const initKalturaMux = function (player, options) {
 
   // Allow mux to automatically retrieve state information about the player on each event sent
   options.getStateData = () => {
-    const videoElement = player.getVideoElement();
+    // NOTE: getVideoElementProps and getPlayerProps provide "safeCall" util with a function to get
+    // the props instead just accessing the prop. This is needed so "safeCall" util can run properly
+    // because it needs a function as parameter.
+    // For example: the sourceurl comes in player.selectedSource.url but selectedSource can not be
+    // passed to safeCall since it is not a function. If it was player.selectedSource().url then it would work.
 
-    return {
+    let getVideoElementProps = (propName) => {
+      const videoElement = player.getVideoElement();
+      let props = {
+        width: getComputedStyle(videoElement, 'width'),
+        height: getComputedStyle(videoElement, 'height')
+      };
+
+      if (videoElement.videoHeight) {
+        props.videoHeight = videoElement.videoHeight;
+        props.videoWidth = videoElement.videoWidth;
+      }
+
+      return props[propName];
+    };
+
+    let getPlayerProps = (propName) => {
+      let props = {};
+
+      if (player.selectedSource) {
+        props.sourceUrl = player.selectedSource.url;
+        props.mimetype = player.selectedSource.mimetype;
+      };
+
+      if (player.duration) {
+        props.duration = secondsToMs(player.duration);
+      }
+
+      if (player.poster) {
+        props.poster = player.poster;
+      }
+
+      return props[propName];
+    };
+
+    const dynamicProps = { getVideoElementProps, getPlayerProps };
+    const data = {
       // Required properties
       player_is_paused: player.paused || player.ended,
-      player_width: getComputedStyle(videoElement, 'width'),
-      player_height: getComputedStyle(videoElement, 'height'),
-      video_source_height: safeCall(videoElement, 'videoHeight'),
-      video_source_width: safeCall(videoElement, 'videoWidth'),
+      player_width: safeCall(dynamicProps, 'getVideoElementProps', ['width']),
+      player_height: safeCall(dynamicProps, 'getVideoElementProps', ['height']),
+      video_source_height: safeCall(dynamicProps, 'getVideoElementProps', ['videoHeight']),
+      video_source_width: safeCall(dynamicProps, 'getVideoElementProps', ['videoWidth']),
       // Preferred properties
       player_is_fullscreen: safeCall(player, 'isFullscreen'),
       player_autoplay_on: player.config.playback.autoplay === true,
       player_preload_on: player.config.playback.preload === 'auto',
-      video_source_url: safeCall(player.selectedSource, 'url'),
-      video_source_mime_type: safeCall(player.selectedSource, 'mimetype'),
-      video_source_duration: secondsToMs(player.duration),
+      video_source_url: safeCall(dynamicProps, 'getPlayerProps', ['sourceUrl']),
+      video_source_mime_type: safeCall(dynamicProps, 'getPlayerProps', ['mimetype']),
+      video_source_duration: safeCall(dynamicProps, 'getPlayerProps', ['duration']),
       // Optional properties
-      video_poster_url: player.poster
+      video_poster_url: safeCall(dynamicProps, 'getPlayerProps', ['poster'])
     };
+
+    return data;
   };
 
   PlaybackEventMap.forEach((kalturaEvent, muxEvent) => {
