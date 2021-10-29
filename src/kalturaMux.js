@@ -150,8 +150,6 @@ const initKalturaMux = function (player, options) {
 
       // Errors can occur before any other events so we need to emit those
       if (isError) {
-        // avoid duplicated errors with DASH error listener.
-        if (!event.payload.data.message) { return; }
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
       } else {
