@@ -146,30 +146,32 @@ const initKalturaMux = function (player, options) {
   PlaybackEventMap.forEach((kalturaEvent, muxEvent) => {
     player.addEventListener(kalturaEvent, (event) => {
       let data = {};
+      let isError = kalturaEvent === player.Event.Core.ERROR;
 
-      if (!playerReadySent && kalturaEvent === player.Event.Core.PLAY) {
-        emitReady();
-      }
-
-      // Ignore events if there is no `ready` or `play` event before
-      if (ignoreEvents) {
-        return;
-      }
-
-      // "adaptiveEventsSet" needs to be reset because on video changes, the _localPlayer._engine gets
-      // modified and won't preserve previous players. So imagine a playlist with a progressive video, then
-      // an hls, then a dash video. On every video change we need to set the adaptive media player events again
-      if (kalturaEvent === player.Event.Core.CHANGE_SOURCE_STARTED) {
-        adaptiveEventsSet = false;
-        resetAdaptiveMediaPlayers(player);
-      }
-
-      if (kalturaEvent === player.Event.Core.ERROR) {
+      // Errors can occur before any other events so we need to emit those
+      if (isError) {
         // avoid duplicated errors with DASH error listener.
         if (!event.payload.data.message) { return; }
         data.player_error_code = event.payload.code;
         data.player_error_message = event.payload.data.message;
-      };
+      } else {
+        if (!playerReadySent && kalturaEvent === player.Event.Core.PLAY) {
+          emitReady();
+        }
+
+        // Ignore events if there is no `ready` or `play` event before
+        if (ignoreEvents) {
+          return;
+        }
+
+        // "adaptiveEventsSet" needs to be reset because on video changes, the _localPlayer._engine gets
+        // modified and won't preserve previous players. So imagine a playlist with a progressive video, then
+        // an hls, then a dash video. On every video change we need to set the adaptive media player events again
+        if (kalturaEvent === player.Event.Core.CHANGE_SOURCE_STARTED) {
+          adaptiveEventsSet = false;
+          resetAdaptiveMediaPlayers(player);
+        }
+      }
 
       player.mux.emit(muxEvent, data);
     });
