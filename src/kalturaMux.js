@@ -20,6 +20,13 @@ const initKalturaMux = function (player, options) {
   player.mux = {};
   let adaptiveEventsSet = false;
 
+  // Events should start emitting after the initial `ready`. But there are some scenarios when
+  // the `ready` will never run and will go straight to `play`. So we need this flag to determine
+  // when to start emitting by looking at the `play` or `ready`, whatever happens first.
+  let ignoreEvents = true;
+
+  let playerReadySent = false;
+
   player.mux.emit = function (eventType, data) {
     mux.emit(playerID, eventType, data);
     // console.log('EMIT:', playerID, eventType, data);
@@ -32,13 +39,16 @@ const initKalturaMux = function (player, options) {
     }
   };
 
-  let playerReadySent = false;
-
-  player.ready().then(() => {
+  const emitReady = () => {
     if (!playerReadySent) {
+      ignoreEvents = false;
       player.mux.emit('playerready');
       playerReadySent = true;
     }
+  };
+
+  player.ready().then(() => {
+    emitReady();
   });
 
   const PlaybackEventMap = new Map();
@@ -136,6 +146,15 @@ const initKalturaMux = function (player, options) {
   PlaybackEventMap.forEach((kalturaEvent, muxEvent) => {
     player.addEventListener(kalturaEvent, (event) => {
       let data = {};
+
+      if (!playerReadySent && kalturaEvent === player.Event.Core.PLAY) {
+        emitReady();
+      }
+
+      // Ignore events if there is no `ready` or `play` event before
+      if (ignoreEvents) {
+        return;
+      }
 
       // "adaptiveEventsSet" needs to be reset because on video changes, the _localPlayer._engine gets
       // modified and won't preserve previous players. So imagine a playlist with a progressive video, then
