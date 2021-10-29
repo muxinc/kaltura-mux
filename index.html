@@ -2,74 +2,74 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>Kaltura Mux Demo</title>
-  <script type="text/javascript"
-    src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
-  <script src="./kaltura-mux.js"></script>
+	<meta charset="utf-8">
+	<title>Kaltura Mux Demo</title>
+	<script type="text/javascript"
+		src="https://cdnapisec.kaltura.com/p/4298703/embedPlaykitJs/uiconf_id/48786693"></script>
+	<script src="./kaltura-mux.js"></script>
 </head>
 
 <body>
-  <h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
-  <div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
-  <button id="next_button" onClick="nextVideo()">Next Video Source</button>
-  <script>
-    function nextVideo() {
-      DEkalturaPlayer.configure({
-        playback: {
-          streamPriority: [
-            {
-              engine: 'html5',
-              format: 'progressive',
-            },
-          ],
-        },
-      });
+	<h1>2021 DYNAMIC EMBED (embeds playkit)</h1>
+	<div id="kalturaPlayer" style="width: 560px; height: 395px"></div>
+	<button id="next_button" onClick="nextVideo()">Next Video Source</button>
+	<script>
+		function nextVideo() {
+			DEkalturaPlayer.configure({
+				playback: {
+					streamPriority: [
+						{
+							engine: 'html5',
+							format: 'progressive',
+						},
+					],
+				},
+			});
 
-      DEkalturaPlayer.setMedia({
-        sources: {
-          progressive: [
-            {
-              mimetype: 'video/mp4',
-              url: 'http://vjs.zencdn.net/v/oceans.mp4',
-              id: '3',
-            },
-          ],
-        },
-      });
-    }
-    var config = {
-      targetId: 'kalturaPlayer',
-      sources: {
-        progressive: [
-          {
-            mimetype: 'video/mp4',
-            url: 'https://muxed.s3.amazonaws.com/ink.mp4',
-          },
-        ],
-      },
-      provider: {
-        partnerId: 4298703,
-      },
-      playback: {
-        autoplay: true,
-      },
-      plugins: {
-        mux: {
-          data: {
-            env_key: '<YOUR_ENV_KEY>', // required
+			DEkalturaPlayer.setMedia({
+				sources: {
+					progressive: [
+						{
+							mimetype: 'video/mp4',
+							url: 'http://vjs.zencdn.net/v/oceans.mp4',
+							id: '3',
+						},
+					],
+				},
+			});
+		}
+		var config = {
+			targetId: 'kalturaPlayer',
+			sources: {
+				progressive: [
+					{
+						mimetype: 'video/mp4',
+						url: 'https://muxed.s3.amazonaws.com/ink.mp4',
+					},
+				],
+			},
+			provider: {
+				partnerId: 4298703,
+			},
+			playback: {
+				autoplay: false,
+			},
+			plugins: {
+				mux: {
+					data: {
+						env_key: '<YOUR_ENV_KEY>', // required
 
-            // Metadata
-            player_name: 'Kaltura Player', // ex: 'My Main Player'
+						// Metadata
+						player_name: 'Kaltura Player', // ex: 'My Main Player'
 
-            // ... and other metadata
-          }
-        }
-      }
-    };
+						// ... and other metadata
+					}
+				}
+			}
+		};
 
-    var DEkalturaPlayer = KalturaPlayer.setup(config);
-  </script>
+		var DEkalturaPlayer = KalturaPlayer.setup(config);
+	</script>
 </body>
 
 </html>
