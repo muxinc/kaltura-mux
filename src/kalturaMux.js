@@ -136,6 +136,7 @@ const initKalturaMux = function (player, options) {
       video_source_url: safeCall(dynamicProps, 'getPlayerProps', ['sourceUrl']),
       video_source_mime_type: safeCall(dynamicProps, 'getPlayerProps', ['mimetype']),
       video_source_duration: safeCall(dynamicProps, 'getPlayerProps', ['duration']),
+      video_source_is_live: player.isLive(),
       // Optional properties
       video_poster_url: safeCall(dynamicProps, 'getPlayerProps', ['poster'])
     };
@@ -191,7 +192,6 @@ const setAdaptiveMediaPlayerEvents = (player, options) => {
     // there is no an "adaptive media Player" in "_engine" like hls or shaka, we don't want to be hitting
     // this function for every single event.
     eventsSet = true;
-
     // Shaka Player (dash):
     const shaka = player._localPlayer._engine._mediaSourceAdapter._shaka;
 
